@@ -18,7 +18,7 @@ def run_cmd_reout(cmd, args=' ', con = False):
     p = subprocess.Popen(tcall_cmd, shell=True, stdout=subprocess.PIPE, executable='/bin/bash')
     touput = p.communicate()[0]
     if p.returncode != 0 :
-        print('<<< ' + tcall_cmd + ' >>>' run failed!)
+        print('<<< ' + tcall_cmd + ' >>> run failed!')
         if not con :
             sys.exit(1)
     print(toutput)
@@ -40,20 +40,24 @@ image_path = '/home/vm/'
 
 # clone kvm
 clone_cmd = 'virt-clone --original=' + template_kvm  + ' --name=' + hostname + ' --file=' + image_path + hostname + '.qcow2'
-
 run_cmd_reout(clone_cmd)
 
 # sysprep kvm
 sysprep_cmd = 'virt-sysprep -d ' + hostname + ' --hostname ' + hostname
-
 run_cmd_reout(sysprep_cmd)
 
 # start hostname vm
 start_vm_cmd = 'virsh start ' + hostname
 run_cmd_reout(start_vm_cmd)
 
-# get ip
-
+# get uuid, mac, cpu core, ram, disk of cloned domain
+host_dumpxml_cmd = 'virsh dumpxml ' + hostname
+hostDumpxml = run_cmd_reout(host_dumpxml_cmd)
+hostMac = ''
+hostCpuCore = 0
+hostRam = 0
+hostDisk = 0
+hostArch = ''
 
 
 
