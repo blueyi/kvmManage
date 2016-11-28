@@ -48,7 +48,7 @@ if isDelete != 'YES':
     print("You don't really want to delete <" + hostname + "> I can't delete it")
     sys.exit(1)
 
-image_path = '/home/blueyi/vhost/'
+image_path = '/home/vhost/image/'
 
 # hostname info
 print('------' + hostname + ' infomation------')

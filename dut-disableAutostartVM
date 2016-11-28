@@ -10,7 +10,7 @@ def welcome_print(msg):
     print('   <<< ' + msg + ' >>>')
     print('*' * 70)
 
-welcome_print('Create your KVM virtual machine, powered by blueyi')
+welcome_print('Disable autostart your KVM virtual machine, powered by blueyi')
 
 
 # command to run and get the output
@@ -33,8 +33,6 @@ curr_path = os.path.split(os.path.realpath(__file__))[0]
 user_path = os.path.expanduser('~')
 
 # list all kvm exist
-print('All virtual machine list in the following')
-run_cmd_reout('virsh list --all')
 
 hostname = ''
 if len(sys.argv) != 2:
@@ -42,39 +40,16 @@ if len(sys.argv) != 2:
 else:
     hostname = sys.argv[1]
 
-template_kvm = 'ubuntuBase'
 image_path = '/home/blueyi/vhost/'
 
-# clone kvm
-clone_cmd = 'virt-clone --force --original=' + template_kvm  + ' --name=' + hostname + ' --file=' + image_path + hostname + '.qcow2'
-run_cmd_reout(clone_cmd)
-
-# sysprep kvm
-sysprep_cmd = 'virt-sysprep -d ' + hostname + ' --hostname ' + hostname
-run_cmd_reout(sysprep_cmd)
-
-# start hostname vm
-start_vm_cmd = 'virsh start ' + hostname
-run_cmd_reout(start_vm_cmd)
-
-# get uuid, mac, cpu core, ram, disk of cloned domain
-# host_dumpxml_cmd = 'virsh dumpxml ' + hostname
-# hostDumpxml = run_cmd_reout(host_dumpxml_cmd)
-# hostMac = ''
-# hostDisk = 0
-# hostArch = ''
-
-
-# vnc port display
-vnc_display_cmd = 'virsh vncdisplay ' + hostname
-vnc_reout = run_cmd_reout(vnc_display_cmd, isprint=False)
-vnc_port = 5900 + int(vnc_reout[(vnc_reout.find(':') + 1):])
-
 # hostname info
-print('------Your host ' + hostname + ' has been created------')
 print('------' + hostname + ' infomation------')
 host_info_cmd = 'virsh dominfo ' + hostname
 run_cmd_reout(host_info_cmd)
+disautostart_cmd = 'virsh autostart --disable ' + hostname
+run_cmd_reout(disautostart_cmd)
 
-welcome_print(hostname + ' VNC port:' + str(vnc_port) + ' enjoy it!')
+# list all kvm exist
+print('Autostart virtual machine list in the following')
+run_cmd_reout('virsh list --autostart --all')
 
