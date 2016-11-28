@@ -56,7 +56,7 @@ host_info_cmd = 'virsh dominfo ' + hostname
 run_cmd_reout(host_info_cmd)
 shutdown_cmd = 'virsh shutdown ' + hostname
 undefine_cmd = 'virsh undefine ' + hostname
-delete_cmd = 'rm -rf ' + image_path + hostname + '.qcow2'
+delete_cmd = 'sudo rm -rf ' + image_path + hostname + '.qcow2'
 run_cmd_reout(shutdown_cmd, con=True)
 run_cmd_reout(undefine_cmd, con=True)
 run_cmd_reout(delete_cmd, con=True)
