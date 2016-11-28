@@ -1,0 +1,8 @@
+虚拟机相关的可用命令如下：
+createvm <your-host-name> 创建名为<your-host-name>的虚拟机，统一规定自己创建的虚拟机以自己的姓名简拼开头，只能是英文，数字，短划线的组合，如wyl-master，暂时默认只创建ubuntu server 16.04版本的虚拟机，虚拟机创建完之后会给你一个VNC端口号，可以通过VNC访问你的虚拟机，或者获取你的虚拟机ip后，通过ssh访问．虚拟机的默认用户名和密码都是dutoe，自行修改
+
+deletevm <your-host-name> 删除你的虚拟机，删除之前确认不要删成别人的了
+
+displayvm 显示所有已经创建的虚拟机及其状态
+
+vmvncport <your-host-name> 显示你虚拟机的VNC端口号，只有虚拟机运行期间才会有VNC端口号
