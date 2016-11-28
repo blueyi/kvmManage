@@ -42,15 +42,15 @@ if len(sys.argv) != 2:
 else:
     hostname = sys.argv[1]
 
-template_kvm = 'ubuntuserver'
-image_path = '/home/vhost/'
+template_kvm = 'ubuntuBase'
+image_path = '/home/blueyi/vhost/'
 
 # clone kvm
-clone_cmd = 'virt-clone --original=' + template_kvm  + ' --name=' + hostname + ' --file=' + image_path + hostname + '.qcow2'
+clone_cmd = 'virt-clone --force --original=' + template_kvm  + ' --name=' + hostname + ' --file=' + image_path + hostname + '.qcow2'
 run_cmd_reout(clone_cmd)
 
 # sysprep kvm
-sysprep_cmd = 'sudo virt-sysprep -d ' + hostname + ' --hostname ' + hostname
+sysprep_cmd = 'virt-sysprep -d ' + hostname + ' --hostname ' + hostname
 run_cmd_reout(sysprep_cmd)
 
 # start hostname vm

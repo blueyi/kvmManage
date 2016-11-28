@@ -45,9 +45,10 @@ else:
 isDelete = raw_input('You want delete your following host with your heart(YES or NO) \n' + hostname + '\n')
 
 if isDelete != 'YES':
+    print("You don't really want to delete <" + hostname + "> I can't delete it")
     sys.exit(1)
 
-image_path = '/home/vhost/'
+image_path = '/home/blueyi/vhost/'
 
 # hostname info
 print('------' + hostname + ' infomation------')
