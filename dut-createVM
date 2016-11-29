@@ -50,7 +50,7 @@ clone_cmd = 'virt-clone --force --original=' + template_kvm  + ' --name=' + host
 run_cmd_reout(clone_cmd)
 
 # sysprep kvm
-sysprep_cmd = 'sudo virt-sysprep -d ' + hostname + ' --hostname ' + hostname
+sysprep_cmd = 'sudo virt-sysprep -d ' + hostname + ' --hostname ' + hostname + ' --operations defaults,-ssh-hostkeys'
 run_cmd_reout(sysprep_cmd)
 
 # start hostname vm
