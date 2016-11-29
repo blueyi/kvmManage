@@ -10,7 +10,7 @@ def welcome_print(msg):
     print('   <<< ' + msg + ' >>>')
     print('*' * 70)
 
-welcome_print('Shutdown your KVM virtual machine, powered by blueyi')
+welcome_print('Get your KVM virtual machine IP address, powered by blueyi')
 
 
 # command to run and get the output
@@ -32,9 +32,6 @@ curr_path = os.path.split(os.path.realpath(__file__))[0]
 # user path
 user_path = os.path.expanduser('~')
 
-# list all kvm exist
-print('All virtual machine list in the following')
-run_cmd_reout('virsh list --all')
 
 hostname = ''
 if len(sys.argv) != 2:
@@ -42,16 +39,22 @@ if len(sys.argv) != 2:
 else:
     hostname = sys.argv[1]
 
-image_path = '/home/blueyi/vhost/'
+
+# nmap ping all ip
+nmap_cmd = 'nmap -sP 192.168.1.0/24'
+run_cmd_reout(nmap_cmd, isprint=False)
+get_mac_cmd = "virsh dumpxml " + hostname + " | grep 'mac address' | cut -c 21-37"
+hostMac = run_cmd_reout(get_mac_cmd, isprint=False).strip()
+arp_ip_cmd = "arp -an | grep '"  + hostMac + "'"
+arp_ip = run_cmd_reout(arp_ip_cmd, isprint=False)
+host_ip = arp_ip[arp_ip.find('(') + 1 : arp_ip.find(')')]
+
 
 # hostname info
 print('------' + hostname + ' infomation------')
 host_info_cmd = 'virsh dominfo ' + hostname
 run_cmd_reout(host_info_cmd)
-shutdown_cmd = 'virsh shutdown ' + hostname
-run_cmd_reout(shutdown_cmd)
+print('MAC address: ' + hostMac)
 
-# list all kvm exist
-print('All virtual machine list in the following')
-run_cmd_reout('virsh list --all')
+welcome_print(hostname + ' IP: ' + host_ip + ' SSH port: 22' +  ' enjoy it!')
 
