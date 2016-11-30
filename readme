@@ -21,6 +21,8 @@ dut-vmVNCPort  <your-host-name>  查看虚拟机的VNC端口号，只有虚拟�
 
 dut-getvmip  <your-host-name> 查看虚拟机IP
 
+dut-clonevmfrom  <your-clone-from-host-name> <new-host-name> 克隆虚拟机，第一个参数是被克隆的虚拟机名字，第二个参数是新克隆出来的虚拟机名字
+
 通常情况下IP不会变化，为了防止重启后IP变化，记得通过dut-getvmip查看你的虚拟机IP，可以联系我在路由器中绑定你的虚拟机MAC跟IP。
 
 VNC连接方法：
