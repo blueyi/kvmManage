@@ -3,7 +3,7 @@
 
 from common import *
 
-welcome_print('Disable autostart your KVM virtual machine, powered by blueyi')
+welcome_print('Get your KVM virtual machine IP address, powered by blueyi')
 
 hostname = ''
 if len(sys.argv) != 2:
@@ -11,4 +11,4 @@ if len(sys.argv) != 2:
 else:
     hostname = sys.argv[1]
 
-disableAutostartVM(hostname)
+getVMInfo(hostname)

@@ -1,0 +1,16 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from common import *
+
+welcome_print('Create your own KVM virtual machine, powered by blueyi')
+
+hostname = 'my-original-vm'
+ram = 1024
+vcpu = 1
+disk = 20
+os_type = rhel7
+iso = '/home/blueyi/vhost/iso/centos7.iso'
+createVM(hostname, ram, vcpu, disk, os_type, iso)
+startVM(hostname)
+
