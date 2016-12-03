@@ -30,3 +30,13 @@ VNC连接方法：
 3.打开VNC viewer，输入192.168.1.121:5901即可连接5901对应的虚拟机，可以同时连接多个虚拟机
 
 服务器用户名dutoeserver，密码dutoeserver，服务器IP为192.168.1.121。该账号仅用于虚拟机相关操作
+
+指定静态ip的方法，修改/etc/network/interfaces内容如下，注意ens3改成你自己的网卡，ip地址改成你创建或启动虚拟机时路由器分配给你的地址，其他东西不用变：
+auto ens3
+iface ens3 inet static
+address 192.168.1.125
+netmask 255.255.255.0
+gateway 192.168.1.2
+dns-nameservers 2192.168.1.2
+
+

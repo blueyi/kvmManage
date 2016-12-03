@@ -16,8 +16,8 @@ Some function and const value
 
 image_path = '/home/blueyi/vhost/image/'
 iso_path = '/home/blueyi/vhost/iso/'
-template_kvm = 'ubuntu1604'
-sub_ip = '192.168.2.0'
+template_kvm = 'ubuntuServer1604-original'
+sub_ip = '192.168.1.0'
 
 
 # print some important string
@@ -167,9 +167,6 @@ def cloneVM(host_name, template) :
 def sysprepVM(new_host_name, old_host_name, miniClear = False) :
     if isVMRunning(old_host_name) :
         print(old_host_name + ' must to be shutdown to be clone!')
-        return
-    if isVMExist(new_host_name) :
-        print(new_host_name + ' has exist!')
         return
     sysprep_cmd = ''
     if miniClear :
