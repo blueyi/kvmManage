@@ -190,6 +190,12 @@ def deleteVM(host_name) :
     delete_cmd = 'sudo rm -rf ' + image_path + host_name + '.qcow2'
     run_cmd_reout(delete_cmd)
 
+# attach interface to vm
+def addInterface(host_name) :
+    addif_cmd = 'virsh attach-interface ' + host_name + ' --type bridge --source br0 --model virtio --persistent'
+    run_cmd_reout(addif_cmd)
+
+
 
 # Originally create kvm from iso image
 def createVM(host_name, ram = 1024, vcpu = 1, disk = 10, os_type = 'ubuntu16.04', iso = 'UbuntuServer16.04.iso') :
