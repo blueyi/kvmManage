@@ -5,10 +5,15 @@ from common import *
 
 welcome_print('Get your KVM virtual machine IP address, powered by blueyi')
 
+isdetail = False
+
 hostname = ''
-if len(sys.argv) != 2:
+if len(sys.argv) < 2:
     hostname = raw_input('Enter your unique hostname:\n')
 else:
     hostname = sys.argv[1]
 
-getVMInfo(hostname)
+if len(sys.argv) == 3 and sys.argv[2] == '-d':
+    isdetail = True
+
+getVMInfo(hostname, isdetail)

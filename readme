@@ -13,11 +13,11 @@
  
 * `dut-listvm`  显示所有虚拟机及其状态
  
-* `dut-shutdownvm  <your-host-name>`  强制关闭虚拟机
+* `dut-shutdownvm  <your-host-name>` [-f]  强制关闭虚拟机 可选的选项-f，当普通方法无法关机时使用-f，会丢失虚拟机中未保存的数据
  
 * `dut-startvm  <your-host-name>` 手动启动虚拟机
  
-* `dut-getvminfo  <your-host-name>`  查看虚拟机的基本信息，包括IP和VNC端口号，只有虚拟机运行期间才会有IP和VNC端口号
+* `dut-getvminfo  <your-host-name>` [-d] 查看虚拟机的基本信息，包括IP和VNC端口号，只有虚拟机运行期间才会有IP和VNC端口号，可选参数-d，获得虚拟机磁盘的详细信息，需要root权限
  
 * `dut-clonevmfrom  <your-clone-from-host-name> <new-host-name>` 克隆虚拟机，第一个参数是被克隆的虚拟机名字，第二个参数是新克隆出来的虚拟机名字
  

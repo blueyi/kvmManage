@@ -139,14 +139,14 @@ def getIP(host_name) :
         return arp_ip[arp_ip.find('(') + 1 : arp_ip.find(')')]
 
 # get specified KVM info, mac, ip and vnc port
-def getVMInfo(host_name) : 
+def getVMInfo(host_name, isdetail=False) : 
     if not isVMExist(host_name) :
         print('<<< ' + host_name + ' Not Exist! >>>')
         return
     print('------' + host_name + ' infomation------')
     host_info_cmd = 'virsh dominfo ' + host_name
     run_cmd_reout(host_info_cmd)
-    getDiskInfo(host_name)
+    getDiskInfo(host_name, isdetail)
     print('MAC address: \n' + getMAC(host_name))
     welcome_print(host_name + ' IP: ' + getIP(host_name) + ', VNC port: ' + getVNCPort(host_name) +  ' enjoy it!')
 
@@ -166,7 +166,7 @@ def startVM(host_name) :
     getVMInfo(host_name)
 
 # Shutdown kvm
-def shutdownVM(host_name) :
+def shutdownVM(host_name, isforce=False) :
     if not isVMExist(host_name) :
         print('<<< ' + host_name + ' Not Exist! >>>')
         listAllKVM()
@@ -175,7 +175,11 @@ def shutdownVM(host_name) :
         print('<<< ' + host_name + ' Not Running! >>>')
         listAllKVM()
         return
-    shutdown_cmd = 'virsh shutdown ' + host_name
+    shutdown_cmd = ''
+    if isforce :
+        shutdown_cmd = 'virsh destroy ' + host_name
+    else:
+        shutdown_cmd = 'virsh shutdown ' + host_name
     run_cmd_reout(shutdown_cmd)
 
 # Set specified KVM to autostart when boot

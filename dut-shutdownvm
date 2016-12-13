@@ -9,10 +9,14 @@ welcome_print('Shutdown your KVM virtual machine , powered by blueyi')
 listAllKVM()
 
 hostname = ''
-if len(sys.argv) != 2:
+isforce = False;
+if len(sys.argv) < 2:
     hostname = raw_input('Enter your unique hostname:\n')
 else:
     hostname = sys.argv[1]
 
+if len(sys.argv) == 3 and sys.argv[2] == '-f' :
+    isforce = True
+
 # hostname info
-shutdownVM(hostname)
+shutdownVM(hostname, isforce)
