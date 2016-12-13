@@ -23,6 +23,8 @@
  
 * `dut-originalvmcreate`  创建你指定的内在大小、CPU个数、硬盘大小和系统光盘路径的虚拟机
  
+* `dut-addinterface  <your-host-name>`>  为虚拟机增加一块网卡
+
 通常情况下IP不会变化，为了防止重启后IP变化，记得通过`dut-getvminfo`查看你的虚拟机IP，可以联系我在路由器中绑定你的虚拟机MAC跟IP。
 
 VNC连接方法：
