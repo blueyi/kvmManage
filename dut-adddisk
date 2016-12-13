@@ -1,0 +1,17 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from common import *
+
+welcome_print('Add disk to your KVM virtual machine, powered by blueyi')
+
+hostname = ''
+disk_size = ''
+if len(sys.argv) != 3:
+    hostname = raw_input('Enter the hostname you want to clone from:\n')
+    disk_size = raw_input('Enter your disk size:\n')
+else:
+    hostname = sys.argv[1]
+    disk_size = sys.argv[2]
+
+addDisk(hostname, disk_size)

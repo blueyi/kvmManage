@@ -9,21 +9,23 @@
  
 * `dut-autostartvm  <your-host-name>`  将虚拟机设置为开机自动启动（即服务器启动时自动启动虚拟机）
  
-* `dut-disableAutostartvm  <your-host-name>`> 取消虚拟机的开机自动启动
+* `dut-disableAutostartvm  <your-host-name>` 取消虚拟机的开机自动启动
  
 * `dut-listvm`  显示所有虚拟机及其状态
  
-* `dut-shutdownvm  <your-host-name>`>  强制关闭虚拟机
+* `dut-shutdownvm  <your-host-name>`  强制关闭虚拟机
  
-* `dut-startvm  <your-host-name>`> 手动启动虚拟机
+* `dut-startvm  <your-host-name>` 手动启动虚拟机
  
-* `dut-getvminfo  <your-host-name>`>  查看虚拟机的基本信息，包括IP和VNC端口号，只有虚拟机运行期间才会有IP和VNC端口号
+* `dut-getvminfo  <your-host-name>`  查看虚拟机的基本信息，包括IP和VNC端口号，只有虚拟机运行期间才会有IP和VNC端口号
  
-* `dut-clonevmfrom  <your-clone-from-host-name> <new-host-name>`> 克隆虚拟机，第一个参数是被克隆的虚拟机名字，第二个参数是新克隆出来的虚拟机名字
+* `dut-clonevmfrom  <your-clone-from-host-name> <new-host-name>` 克隆虚拟机，第一个参数是被克隆的虚拟机名字，第二个参数是新克隆出来的虚拟机名字
  
 * `dut-originalvmcreate`  创建你指定的内在大小、CPU个数、硬盘大小和系统光盘路径的虚拟机
  
-* `dut-addinterface  <your-host-name>`>  为虚拟机增加一块网卡
+* `dut-addinterface  <your-host-name>  为虚拟机增加一块网卡，增加后的网卡直接进入虚拟机通过ifconfig -a即可可看
+
+* `dut-adddisk  <your-host-name> size`  为虚拟机增加一块大小为size的硬盘，默认默认增加的硬盘在服务器的机械上
 
 通常情况下IP不会变化，为了防止重启后IP变化，记得通过`dut-getvminfo`查看你的虚拟机IP，可以联系我在路由器中绑定你的虚拟机MAC跟IP。
 

@@ -14,11 +14,14 @@ import time
 Some function and const value
 """
 
-image_path = '/home/blueyi/vhost/image/'
-iso_path = '/home/blueyi/vhost/iso/'
+image_path = '/home/vhost/image/'
+iso_path = '/home/vhost/iso/'
 template_kvm = 'ubuntuServer1604-original'
 sub_ip = '192.168.1.0'
+addDisk_path = '/mnt/data/addDisk/'
 
+
+itoa = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']
 
 # print some important string
 def welcome_print(msg):
@@ -57,6 +60,48 @@ def isVMRunning(host_name) :
 def listAllKVM() :
     print('All virtual machine list in the following')
     run_cmd_reout('virsh list --all')
+
+# create disk
+def createDisk(path, size) :
+    create_disk_cmd = 'qemu-img create -f qcow2 ' + path + ' ' + str(size) + 'G'
+    run_cmd_reout(create_disk_cmd)
+
+# get image detail info
+def imgDetailInfo(path) :
+    img_info_cmd = 'sudo qemu-img info ' + path
+    run_cmd_reout(img_info_cmd)
+
+# get image info
+def imgInfo(path) :
+    img_info_cmd = 'ls -sh ' + path
+    run_cmd_reout(img_info_cmd)
+    
+# attach disk to vm
+def addDisk(host_name, size) :
+    tistr = time.strftime('%Y%m%d%H%M%S')
+    disk_path = addDisk_path + host_name + '-' + str(tistr) + '.qcow2'
+    createDisk(disk_path , size)
+    adddisk_cmd = 'virsh attach-disk ' + host_name + ' --source ' + disk_path + ' --target vd' + itoa[int(tistr) % 10] + ' --subdriver qcow2 --targetbus virtio --persistent'
+    run_cmd_reout(adddisk_cmd)
+
+# Get disk list of kvm
+def getDiskList(host_name) :
+    disk_list_cmd = 'virsh domblklist ' + host_name
+    output = run_cmd_reout(disk_list_cmd, jumpErr=True, goOnRun=True)
+    tlist = output.split()
+    disk_list = []
+    for line in tlist :
+        if '/' in line and ('.qcow2' in line or '.img' in line) :
+            disk_list.append(line)
+    return disk_list
+
+# Get disk info of kvm
+def getDiskInfo(host_name, detail = False) :
+    for disk in getDiskList(host_name) :
+        if detail :
+            imgDetailInfo(disk)
+        else :
+            imgInfo(disk)
 
 # Get VNC port
 def getVNCPort(host_name) :
@@ -101,8 +146,10 @@ def getVMInfo(host_name) :
     print('------' + host_name + ' infomation------')
     host_info_cmd = 'virsh dominfo ' + host_name
     run_cmd_reout(host_info_cmd)
-    print('MAC address: ' + getMAC(host_name))
+    getDiskInfo(host_name)
+    print('MAC address: \n' + getMAC(host_name))
     welcome_print(host_name + ' IP: ' + getIP(host_name) + ', VNC port: ' + getVNCPort(host_name) +  ' enjoy it!')
+
 
 # Start kvm
 def startVM(host_name) :
@@ -183,19 +230,17 @@ def undefineVM(host_name) :
     undefine_cmd = 'virsh undefine ' + host_name
     run_cmd_reout(undefine_cmd)
 
-
 # Delete specified vm from disk
 def deleteVM(host_name) :
+    for path in getDiskList(host_name) :
+        delete_cmd = 'sudo rm -rf ' + path
+        run_cmd_reout(delete_cmd)
     undefineVM(host_name)
-    delete_cmd = 'sudo rm -rf ' + image_path + host_name + '.qcow2'
-    run_cmd_reout(delete_cmd)
 
 # attach interface to vm
 def addInterface(host_name) :
     addif_cmd = 'virsh attach-interface ' + host_name + ' --type bridge --source br0 --model virtio --persistent'
     run_cmd_reout(addif_cmd)
-
-
 
 # Originally create kvm from iso image
 def createVM(host_name, ram = 1024, vcpu = 1, disk = 10, os_type = 'ubuntu16.04', iso = 'UbuntuServer16.04.iso') :
