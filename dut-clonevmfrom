@@ -17,4 +17,4 @@ else:
 
 cloneVM(cloned_hostname, hostname)
 sysprepVM(cloned_hostname, cloned_hostname, miniClear=True)
-startVM(cloneVM)
+startVM(cloned_hostname)
