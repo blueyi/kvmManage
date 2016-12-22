@@ -3,14 +3,32 @@
 
 from common import *
 
-welcome_print('Create your own KVM virtual machine, powered by blueyi')
+welcome_print('Create your own KVM image template, powered by blueyi')
 
-hostname = 'my-original-vm'
-ram = 1024
-vcpu = 1
-disk = 20
-os_type = rhel7
-iso = '/home/blueyi/vhost/iso/centos7.iso'
-createVM(hostname, ram, vcpu, disk, os_type, iso)
-startVM(hostname)
 
+file_name = 'wyl-vm-config.ini'
+
+"""
+
+if len(sys.argv) > 1:
+    file_name = sys.argv[1]
+elif len(file_name) == 0:
+    while len(file_name) == 0:
+        file_name = raw_input('Enter your specific file name:\n')
+"""
+
+config_dict = getKeyValue(file_name)
+
+hostname = config_dict['hostname']
+ram = config_dict['ram']
+vcpu = config_dict['vcpu']
+disk = config_dict['disk']
+os_type = config_dict['os_type']
+iso = config_dict['iso']
+
+print('Your kvm config list following:')
+print(config_dict)
+confirm = raw_input('Do you really want to create your image template by the config?(YES or NO)\n')
+if (confirm == 'YES'):
+    createVM(hostname, ram, vcpu, disk, os_type, iso)
+    getVMInfo(hostname)

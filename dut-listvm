@@ -8,3 +8,4 @@ welcome_print('Display all KVM virtual machine, powered by blueyi')
 
 # list all kvm exist
 listAllKVM()
+print('Total: ' + str(len(hostNameList())))

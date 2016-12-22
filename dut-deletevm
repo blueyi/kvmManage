@@ -8,10 +8,7 @@ welcome_print('Delete your KVM virtual machine, powered by blueyi')
 listAllKVM()
 
 hostname = ''
-if len(sys.argv) != 2:
-    hostname = raw_input('Enter your unique hostname:\n')
-else:
-    hostname = sys.argv[1]
+isforce = False;
 
 isDelete = raw_input('You want delete your following host with your heart(YES or NO) \n' + hostname + '\n')
 
@@ -19,6 +16,16 @@ if isDelete != 'YES':
     print("You don't really want to delete <" + hostname + "> I can't delete it")
     sys.exit(1)
 
-deleteVM(hostname)
-welcome_print('Your host has been deleted: ' + hostname)
+if len(sys.argv) < 2:
+    hostname = raw_input('Enter your unique hostname:\n')
+else:
+    hostname = sys.argv[1]
+
+if len(sys.argv) == 3 and sys.argv[2] == '-f' :
+    isforce = True
+
+if deleteVM(hostname, isforce):
+    welcome_print('Your host has been deleted: ' + hostname)
+else:
+    welcome_print('Your host can no be deleted: ' + hostname + ', maybe try use [-f]')
 

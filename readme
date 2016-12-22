@@ -4,8 +4,7 @@
  
 * `dut-createvm-2g-2core <your-host-name>`  创建名为<your-host-name>的虚拟机，并分配2G内存，2核心CPU。请在必要时再使用该命令创建。该命令需要sudo权限验证
  
-* `dut-deletevm  <your-host-name>` 删除你的虚拟机，删除之前确认不要删成别人的了。删除之前会有提示，必须输入YES，其他任何输入都表示不删除。该命令需要sudo权限验证。
- 
+* `dut-deletevm  <your-host-name>` [-f] 删除你的虚拟机，删除之前确认不要删成别人的了。删除之前会有提示，必须输入YES，其他任何输入都表示不删除。该命令需要sudo权限验证。[-f]为可选参数，强制删除虚拟机
  
 * `dut-autostartvm  <your-host-name>`  将虚拟机设置为开机自动启动（即服务器启动时自动启动虚拟机）
  
@@ -21,11 +20,23 @@
  
 * `dut-clonevmfrom  <your-clone-from-host-name> <new-host-name>` 克隆虚拟机，第一个参数是被克隆的虚拟机名字，第二个参数是新克隆出来的虚拟机名字
  
-* `dut-originalvmcreate`  创建你指定的内在大小、CPU个数、硬盘大小和系统光盘路径的虚拟机
- 
 * `dut-addinterface  <your-host-name>  为虚拟机增加一块网卡，增加后的网卡直接进入虚拟机通过ifconfig -a即可可看
 
 * `dut-adddisk  <your-host-name> size`  为虚拟机增加一块大小为size的硬盘，默认默认增加的硬盘在服务器的机械上
+
+* `dut-originalvmcreate <config-file>`  创建你指定的内在大小、CPU个数、硬盘大小和系统光盘路径的虚拟机
+config-file内容形如下：
+```
+# 根据以下内容创建你自己的虚拟机镜像，等号及等号前面的内容不能修改，它们的顺序可以随意，空格也可以忽略
+
+hostname = wyl-original-vm  #虚拟机镜像名字，必须唯一，不能与系统中其他虚拟机重名，建议以自己名字的首字母开头
+ram = 1  #指定内存大小，单位是G
+vcpu = 1  #指定CPU个数
+disk = 20  #指定磁盘大小，单位是G
+os_type = rhl7  #rhl7表示redhat7系列，可通过命令osinfo-query os查询，基本对应关系是ubuntu16.04就表示Ubuntu 16.04，centos7.0表示CentOS 7.0（其实与rhl7一样）
+iso = /mnt/data/vhost/iso/centos7_mini.iso  #指定系统映像，为了方便其他人重用下载的映像，大家下载的映像路径统一放在/mnt/data/vhos/iso/
+```
+服务器根目录下有模板`original-kvm-config.ini`，可以自己cp一份，按需要修改
 
 通常情况下IP不会变化，为了防止重启后IP变化，记得通过`dut-getvminfo`查看你的虚拟机IP，可以联系我在路由器中绑定你的虚拟机MAC跟IP。
 

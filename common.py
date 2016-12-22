@@ -14,8 +14,8 @@ import time
 Some function and const value
 """
 
-image_path = '/home/vhost/image/'
-iso_path = '/home/vhost/iso/'
+image_path = '/mnt/data/vhost/image/'
+iso_path = '/mnt/data/vhost/iso/'
 template_kvm = 'ubuntuServer1604-original'
 sub_ip = '192.168.1.0'
 addDisk_path = '/mnt/data/addDisk/'
@@ -45,11 +45,23 @@ def run_cmd_reout(tcall_cmd, goOnRun = False, isOutPut = True, jumpErr = False, 
         return toutput
 
 
+# get total domain name list
+def hostNameList():
+    list_cmd = 'virsh list --all'
+    list_out = run_cmd_reout(list_cmd, goOnRun=True, isOutPut=False, jumpErr=True, isReturnCode=False)
+    host_list = []
+    cont = 2
+    for line in list_out.strip().split('\n'):
+        if cont > 0:
+            cont = cont - 1
+            continue
+        host = line.split()[1]
+        host_list.append(host)
+    return host_list
+
 # Is specified KVM exist
 def isVMExist(host_name) :
-    is_exist_cmd = 'virsh domstate ' + host_name
-    return (run_cmd_reout(is_exist_cmd, goOnRun=True, isOutPut=False, jumpErr=True, isReturnCode=True) == 0)
-
+    return (host_name in hostNameList())
 
 # Is specified KVM running
 def isVMRunning(host_name) :
@@ -75,7 +87,7 @@ def imgDetailInfo(path) :
 def imgInfo(path) :
     img_info_cmd = 'ls -sh ' + path
     run_cmd_reout(img_info_cmd)
-    
+
 # attach disk to vm
 def addDisk(host_name, size) :
     tistr = time.strftime('%Y%m%d%H%M%S')
@@ -139,7 +151,7 @@ def getIP(host_name) :
         return arp_ip[arp_ip.find('(') + 1 : arp_ip.find(')')]
 
 # get specified KVM info, mac, ip and vnc port
-def getVMInfo(host_name, isdetail=False) : 
+def getVMInfo(host_name, isdetail=False) :
     if not isVMExist(host_name) :
         print('<<< ' + host_name + ' Not Exist! >>>')
         return
@@ -228,18 +240,22 @@ def sysprepVM(new_host_name, old_host_name, miniClear = False) :
 
 
 # Remove specified vm define
-def undefineVM(host_name) :
+def undefineVM(host_name, isforce=False) :
     if isVMRunning(host_name) :
         shutdownVM(host_name)
+    if isforce :
+        run_cmd_reout('virsh destroy ' + host_name)
     undefine_cmd = 'virsh undefine ' + host_name
-    run_cmd_reout(undefine_cmd)
+    run_cmd_reout(undefine_cmd, goOnRun=True)
 
 # Delete specified vm from disk
-def deleteVM(host_name) :
+def deleteVM(host_name, isforce=False) :
     for path in getDiskList(host_name) :
-        delete_cmd = 'sudo rm -rf ' + path
-        run_cmd_reout(delete_cmd)
-    undefineVM(host_name)
+        if path[len(path) - 4 :] != '.ISO' or path[len(path) - 4 :] != '.iso' :
+            delete_cmd = 'sudo rm -rf ' + path
+            run_cmd_reout(delete_cmd)
+    undefineVM(host_name, isforce)
+    return (host_name not in hostNameList())
 
 # attach interface to vm
 def addInterface(host_name) :
@@ -247,9 +263,9 @@ def addInterface(host_name) :
     run_cmd_reout(addif_cmd)
 
 # Originally create kvm from iso image
-def createVM(host_name, ram = 1024, vcpu = 1, disk = 10, os_type = 'ubuntu16.04', iso = 'UbuntuServer16.04.iso') :
+def createVM(host_name, ram, vcpu, disk, os_type, iso) :
     if isVMExist(host_name) :
-        print(host_name + ' has exist!')
+        print('<<< ' + host_name + ' has exist!' + '>>>')
         return
     create_cmd = 'virt-install \
             --virt-type=kvm \
@@ -258,9 +274,22 @@ def createVM(host_name, ram = 1024, vcpu = 1, disk = 10, os_type = 'ubuntu16.04'
             --vcpus=' + str(vcpu) + ' \
             --os-variant=' + os_type + ' \
             --hvm \
-            --cdrom=' + iso_path + iso + ' \
+            --cdrom=' + iso + ' \
             --network=bridge=br0,model=virtio \
             --graphics vnc,listen=0.0.0.0 \
-            --disk path=' + image_path + host_name + '.qcow2,size=' + str(disk) + ',bus=virtio,format=raw'
+            --disk path=' + image_path + host_name + '.qcow2,size=' + str(disk) + ',bus=virtio,format=qcow2'
     run_cmd_reout(create_cmd)
+
+
+# get key, value of dict from file, # as the comment
+def getKeyValue(file_name, sep='='):
+    arg_dict = {}
+    with open(file_name, 'r') as text:
+        for tline in text:
+            if len(tline.strip()) != 0 and tline[0] != '#':
+                tlink = tline.strip().split('#')[0].split(sep)
+                if len(tlink) > 1:
+                    arg_dict[tlink[0].strip()] = tlink[1].strip()
+    return arg_dict
+
 
