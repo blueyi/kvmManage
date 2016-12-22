@@ -6,16 +6,13 @@ from common import *
 welcome_print('Create your own KVM image template, powered by blueyi')
 
 
-file_name = 'wyl-vm-config.ini'
-
-"""
+file_name = ''
 
 if len(sys.argv) > 1:
     file_name = sys.argv[1]
 elif len(file_name) == 0:
     while len(file_name) == 0:
         file_name = raw_input('Enter your specific file name:\n')
-"""
 
 config_dict = getKeyValue(file_name)
 

@@ -274,6 +274,7 @@ def createVM(host_name, ram, vcpu, disk, os_type, iso) :
             --vcpus=' + str(vcpu) + ' \
             --os-variant=' + os_type + ' \
             --hvm \
+            --noautoconsole \
             --cdrom=' + iso + ' \
             --network=bridge=br0,model=virtio \
             --graphics vnc,listen=0.0.0.0 \
