@@ -28,4 +28,4 @@ print(config_dict)
 confirm = raw_input('Do you really want to create your image template by the config?(YES or NO)\n')
 if (confirm == 'YES'):
     createVM(hostname, ram, vcpu, disk, os_type, iso)
-    getVMInfo(hostname)
+    getVMInfo(hostname, wait=0)

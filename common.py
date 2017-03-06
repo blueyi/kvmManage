@@ -132,7 +132,7 @@ def getMAC(host_name) :
     return run_cmd_reout(get_mac_cmd, goOnRun=True, isOutPut=False).strip()
 
 # Get ip address
-def getIP(host_name) :
+def getIP(host_name, wait=20) :
     if not isVMRunning(host_name) :
         return host_name + ' Not Running!'
     host_mac = getMAC(host_name)
@@ -140,7 +140,7 @@ def getIP(host_name) :
     arp_ip = ''
     start_time = int(time.time())
     # wait for kvm start finish
-    while (arp_ip == '' and int(time.time()) - start_time < 20):
+    while (arp_ip == '' and int(time.time()) - start_time < wait):
         nmap_cmd = 'nmap -sP --host-timeout 15s ' + sub_ip + '/24'
         run_cmd_reout(nmap_cmd, goOnRun=True, isOutPut=False)
         arp_ip_cmd = "arp -an | grep '"  + host_mac + "'"
@@ -151,7 +151,7 @@ def getIP(host_name) :
         return arp_ip[arp_ip.find('(') + 1 : arp_ip.find(')')]
 
 # get specified KVM info, mac, ip and vnc port
-def getVMInfo(host_name, isdetail=False) :
+def getVMInfo(host_name, isdetail=False, wait=20) :
     if not isVMExist(host_name) :
         print('<<< ' + host_name + ' Not Exist! >>>')
         return
@@ -160,7 +160,7 @@ def getVMInfo(host_name, isdetail=False) :
     run_cmd_reout(host_info_cmd)
     getDiskInfo(host_name, isdetail)
     print('MAC address: \n' + getMAC(host_name))
-    welcome_print(host_name + ' IP: ' + getIP(host_name) + ', VNC port: ' + getVNCPort(host_name) +  ' enjoy it!')
+    welcome_print(host_name + ' IP: ' + getIP(host_name, wait) + ', VNC port: ' + getVNCPort(host_name) +  ' enjoy it!')
 
 
 # Start kvm
