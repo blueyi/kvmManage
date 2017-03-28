@@ -29,7 +29,7 @@ add to your .bashrc or .bash_profile or /etc/profile
  
 * `dut-clonevmfrom  <your-clone-from-host-name> <new-host-name>` 克隆虚拟机，第一个参数是被克隆的虚拟机名字，第二个参数是新克隆出来的虚拟机名字
  
-* `dut-addinterface  <your-host-name>  为虚拟机增加一块网卡，增加后的网卡直接进入虚拟机通过ifconfig -a即可可看
+* `dut-addinterface  <your-host-name>`  为虚拟机增加一块网卡，增加后的网卡直接进入虚拟机通过ifconfig -a即可可看
 
 * `dut-adddisk  <your-host-name> size`  为虚拟机增加一块大小为size的硬盘，默认默认增加的硬盘在服务器的机械上
 
